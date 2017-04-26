@@ -82,9 +82,12 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     test -z "$found" && echo >&2 "error: failed to fetch GPG key $GPG_KEYS" && exit 1; \
     gpg --batch --verify nginx.tar.gz.asc nginx.tar.gz \
     && rm -r "$GNUPGHOME" nginx.tar.gz.asc \
+    && curl -fSL https://github.com/nbs-system/naxsi/archive/$NAXSI_VERSION.tar.gz -o naxsi.tar.gz \
     && mkdir -p /usr/src \
     && tar -zxC /usr/src -f nginx.tar.gz \
     && rm nginx.tar.gz \
+    && tar -zxC /usr/src -f naxsi.tar.gz \
+    && rm naxsi.tar.gz \
     && cd /usr/src/nginx-$NGINX_VERSION \
     && ./configure $CONFIG --with-debug \
     && make -j$(getconf _NPROCESSORS_ONLN) \
